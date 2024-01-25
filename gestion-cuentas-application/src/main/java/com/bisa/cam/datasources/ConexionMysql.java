@@ -13,23 +13,35 @@ import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import org.springframework.beans.factory.annotation.Value;
 
 @Component
 public class ConexionMysql implements CuentaRepository {
 
     private final Logger logger = LogManager.getLogger(getClass());
 
+    @Value("${base-datos.mysql.user}")
+    private String usuario;
+
+    @Value("${base-datos.mysql.password}")
+    private String password;
+
+    @Value("${base-datos.mysql.urljdbc}")
+    private String urljdbc;
+
     @Override
     public Cuenta consultaCuenta(Long nrocuenta) throws Exception {
-        String user = "root";
-        String pwd = "desa";
+        logger.info("user:{} pawd:{}", usuario, password);
+
+        //String user = "root";
+        //String pwd = "desa";
         String query = "select id, nroCuenta,tipoCuenta, moneda,idCliente,\n" +
                 " saldo,fechaApertura,lugarApertura, estado \n" +
                 " from dbcuentas.cuenta\n" +
                 " where  nroCuenta = ?\n";
         logger.info("CONSULTANDO >>>>" +  " MYSQL:");
 
-        DataSource dataSource = getDataSource(user, pwd);
+        DataSource dataSource = getDataSource(usuario, password, urljdbc);
         Connection con = null;
         CallableStatement cs = null;
         ResultSet rs = null;
@@ -87,8 +99,8 @@ public class ConexionMysql implements CuentaRepository {
 
     @Override
     public Boolean registrarCuenta(Cuenta cuenta) throws Exception {
-        String user = "root";
-        String pwd = "desa";
+        //String user = "root";
+        //String pwd = "desa";
         String query = "INSERT INTO dbcuentas.cuenta\n" +
                 "( nroCuenta,  tipoCuenta,  moneda,  idCliente,\n" +
                 "  saldo,  fechaApertura,  lugarApertura,  estado)\n" +
@@ -96,7 +108,7 @@ public class ConexionMysql implements CuentaRepository {
 
         logger.info("CONSULTANDO >>>>" +  " MYSQL:");
 
-        DataSource dataSource = getDataSource(user, pwd);
+        DataSource dataSource = getDataSource(usuario, password, urljdbc);
         Connection con = null;
         CallableStatement cs = null;
         ResultSet rs = null;
@@ -142,15 +154,17 @@ public class ConexionMysql implements CuentaRepository {
         return registrado;
     }
 
-    public static DataSource getDataSource(final String user, final String pwd) {
+    public static DataSource getDataSource(final String user, final String pwd, final String connectionUrl) {
 
+        LogManager.getLogger("Conecatando a BD con usuario: {"+user+"} passwoed: {"+pwd+"}");
         LogManager.getLogger().info("Obteniendo DataSource...");
 
         PoolConfiguration config = new PoolProperties();
         config.setMaxActive(100);
         config.setMaxIdle(10);
         config.setMinIdle(5);
-        final String connectionUrl = "jdbc:mysql://localhost:3306/dbcuentas";
+        //final String connectionUrl = "jdbc:mysql://localhost:3306/dbcuentas";
+        //final String connectionUrl = "jdbc:mysql://172.19.0.2:3306/dbcuentas";
         LogManager.getLogger().info("URL={}", connectionUrl);
         config.setUrl(connectionUrl);
         config.setUsername(user);
