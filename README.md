@@ -28,8 +28,17 @@ navegador con [http://localhost:8880/swagger-ui/index.html](http://localhost:888
 
 
 ### ACCESO A LA BD MYSQL
-
 Para el ejercicio se utiliza la BD MySql.
+Para configurar la BD MySql, se debe editar el archivo **application.yml** como en el siguiente ejemplo: 
+```shell
+base-datos:
+  mysql:
+    user: root
+    password: desa
+    urljdbc: jdbc:mysql://localhost:3306/dbcuentas
+```
+NOTA: En el contenedor Docker, la variable **localhost**  debe ser cambiada por la IP que asigna el contenedor a la instancia **mysql**
+
 La conexion se realiza desde un cliente SQL
 ```shell
 jdbc:mysql://localhost:3306/mysql
@@ -83,4 +92,4 @@ docker exec -it gestion-cuentas /bin/sh
 ```
 ### DOCUMENTACION DEL SERVICIO
 
-[Cajero_Automatico_Multi_Moneda.pdf](assets/Cajero_Automatico_Multi_Moneda.pdf)
+[DEFINICIONES_DE_ARQUITECTURA_v1.docx](assets/DEFINICIONES_DE_ARQUITECTURA_v1.docx)
