@@ -11,3 +11,9 @@ spring:
     active: ${environment.profile}
   config:
     import: optional:configserver:${SPRING_CLOUD_CONFIG_ADDRESS}
+
+base-datos:
+    mysql:
+      user: root
+      password: desa
+      urljdbc: jdbc:mysql://localhost:3306/dbcuentas
